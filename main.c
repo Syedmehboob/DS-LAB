@@ -1,61 +1,88 @@
-#include<stdio.h>
-#define SIZE 50
-char stack[SIZE];
-int top=-1;
-push(char elem)
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 5
+
+int front=-1;
+int rear=-1;
+
+int queue[MAX];
+
+void Enque(int);
+int Deque();
+void display();
+int main(int argc, char **argv)
 {
-stack[++top]=elem;
+	int option;
+    int item;
+    do{
+        printf("\n 1. Insert to Queue (EnQueue)");
+        printf("\n 2. delete from the Queue (DeQueue)");
+        printf("\n 3. Display the content ");
+        printf("\n 4. Exit\n");
+        printf("Enter the option :");
+        scanf("%d",&option);
+        switch(option)
+        {
+            case 1:  printf("Enter the element\n");
+                     scanf("%d",&item);
+                     Enque(item);
+                     break;
+            case 2:  if(front == -1)
+                     {
+                           printf("Queue is empty\n"); break;
+                     }
+                     else{
+                     item=Deque();
+
+                    printf("Removed element from the queue %d",item);
+
+                     }
+                    break;
+            case 3: display();
+                    break;
+            case 4: exit(0);
+        }
+    } while (option!=4);
+	return 0;
 }
-char pop()
+
+void Enque(int ele)
 {
- return(stack[top--]);
- }
- int pr(char symbol)
- {
- if(symbol== '^')
- {
- return(3);
- }
- else if(symbol== '*' || symbol== '/' )
- {
- return(2);
- }
- else if(symbol== '+' || symbol== '-')
- {
- return(1);
- }
- else {
- return(0);
- }
- }
- void main()
- {
- char infix[50],postfix[50],ch,elem;
- int i=0,k=0;
- printf("enter Infix expression");
- scanf("%s",infix);
- push('#');
- while((ch=infix[i++])!='\0' )
- {
- if(ch == '(')
-    push(ch);
- else
- if(isalnum(ch)) postfix[k++]=ch;
- else
- if(ch==')')
- { while(stack[top] !='(')
- postfix[k++]=pop();
- elem=pop();
- }
- else
- {
- while(pr(stack[top]) >=pr(ch))
-  postfix[k++]=pop();
-  push(ch);
-  }
-  }
-  while(stack[top]!='#')
-   postfix[k++]=pop();
-   postfix[k]='\0';
-   printf("\nPostfixexpression=%s\n",postfix);
-   }
+    if (rear==MAX-1)
+       printf("Queue is full\n");
+    else
+    {
+      if(front == -1)
+          front=0;
+      rear++;
+      queue[rear]=ele;
+
+    }
+}
+int Deque()
+{
+    int item;
+
+        item=queue[front];
+        front++;
+        if(front>rear)
+        {
+            front=-1;
+            rear=-1;
+        }
+        return item;
+
+}
+
+void display()
+{
+    int i;
+    if((front==-1)&& (rear==-1))
+        printf("Queue is empty\n");
+    else
+    {
+        printf("\n Queue contents:");
+        for(i=front;i<=rear;i++)
+            printf("%d", queue[i]);
+    }
+}
