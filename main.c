@@ -1,96 +1,61 @@
-#include <stdio.h>
-#define size 3
+#include<stdio.h>
+#define SIZE 50
+char stack[SIZE];
 int top=-1;
-int stack[size];
-void push(int);
-int pop();
-void display();
-int stackempty();
-int main(int argc, char **argv)
+push(char elem)
 {
-
-    int choice,element;
-    char ch;
-    do
-    {
-    printf("Enter your choice\n");
-    printf("1. Push\n");
-    printf("2. Pop\n");
-    printf("3. Display\n");
-    scanf("%d",&choice);
-    switch(choice)
-    {
-        case 1: printf("Enter the element to be pushed \n");
-                scanf("%d",&element);
-                push(element);
-                break;
-        case 2: if(!stackempty())
-                {
-                  element=pop(stack);
-
-                  printf("Poped element is %d \n",element);
-                }
-                else
-                  printf("stack is empty\n");
-
-                break;
-        case 3: display();
-                break;
-        default: printf("Invalid choice\n");
-    }
-    printf("Do you want to continue:\n");
-    fflush(stdin);
-    scanf("%c",&ch);
-    } while(ch=='y'||ch=='Y');
-	return 0;
+stack[++top]=elem;
 }
-
-int stackempty ()
+char pop()
 {
-    if(top==-1) return 1;
-    else
-    return 0;
-}
-void push(int ele)
-{
-    if (top==size-1)
-    {
-        printf("Stack overflow\n");
-    }
-    else
-    {
-        top++;
-        stack[top]=ele;
-    }
-}
-
-int pop()
-{
-    int popele;
-
-       popele=stack[top];
-
-    top--;
-    return (popele);
-
-
-}
-
-void display()
-{
-    int i;
-    if(top==-1)
-    {
-        printf("Stack is empty\n");
-    }
-    else
-    {
-        printf("The stack elemements\n");
-    for(i=top;i>=0;i--)
-    {
-
-        printf("%d\t",stack[i]);
-    }
-
-    }
-}
+ return(stack[top--]);
+ }
+ int pr(char symbol)
+ {
+ if(symbol== '^')
+ {
+ return(3);
+ }
+ else if(symbol== '*' || symbol== '/' )
+ {
+ return(2);
+ }
+ else if(symbol== '+' || symbol== '-')
+ {
+ return(1);
+ }
+ else {
+ return(0);
+ }
+ }
+ void main()
+ {
+ char infix[50],postfix[50],ch,elem;
+ int i=0,k=0;
+ printf("enter Infix expression");
+ scanf("%s",infix);
+ push('#');
+ while((ch=infix[i++])!='\0' )
+ {
+ if(ch == '(')
+    push(ch);
+ else
+ if(isalnum(ch)) postfix[k++]=ch;
+ else
+ if(ch==')')
+ { while(stack[top] !='(')
+ postfix[k++]=pop();
+ elem=pop();
+ }
+ else
+ {
+ while(pr(stack[top]) >=pr(ch))
+  postfix[k++]=pop();
+  push(ch);
+  }
+  }
+  while(stack[top]!='#')
+   postfix[k++]=pop();
+   postfix[k]='\0';
+   printf("\nPostfixexpression=%s\n",postfix);
+   }
